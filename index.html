@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLEANER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧽</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <canvas id="game" width="960" height="600"></canvas>
+    <canvas id="fx" width="960" height="600"></canvas>
+
+    <!-- HUD during chores -->
+    <div id="hud" class="hidden">
+      <div class="chip" id="hud-player"></div>
+      <div class="hud-mid">
+        <div id="hud-chore"></div>
+        <div class="bar"><div id="hud-bar"></div></div>
+      </div>
+      <div class="chip timer" id="hud-time">60</div>
+    </div>
+
+    <!-- Screens -->
+    <div id="screen" class="screen"></div>
+    <div id="party-root" class="screen hidden"></div>
+  </div>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/art.js"></script>
+<script src="js/chores.js"></script>
+<script src="js/party.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

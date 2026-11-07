@@ -1,0 +1,96 @@
+:root{
+  --cream:#fff6e9; --blush:#ffd6e0; --mint:#c9f2df; --sky:#cfe8ff; --butter:#fff1b8;
+  --ink:#3b2f4a; --pink:#ff7eb6; --blue:#7ec8ff; --yellow:#ffd166; --green:#8be38b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:
+  radial-gradient(circle at 20% 20%, #ffe3ec 0 18%, transparent 19%) 0 0/120px 120px,
+  linear-gradient(160deg,#fbe7ff,#d9f3ff);
+  font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);overflow:hidden;user-select:none;-webkit-user-select:none}
+#app{height:100%;display:grid;place-items:center;padding:16px}
+#stage{position:relative;width:min(96vw, calc((100vh - 32px) * 1.6));aspect-ratio:960/600;
+  border:5px solid var(--ink);border-radius:28px;overflow:hidden;background:var(--cream);
+  box-shadow:0 10px 0 var(--ink),0 18px 40px rgba(59,47,74,.25)}
+canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+#fx{pointer-events:none}
+.hidden{display:none!important}
+
+/* HUD */
+#hud{position:absolute;left:0;right:0;top:0;display:flex;gap:12px;align-items:center;padding:10px 14px;pointer-events:none}
+.chip{background:#fff;border:3px solid var(--ink);border-radius:999px;padding:4px 14px;font-weight:600;font-size:clamp(12px,1.8vw,18px);white-space:nowrap;box-shadow:0 3px 0 var(--ink)}
+.chip .dot{display:inline-block;width:.8em;height:.8em;border-radius:50%;border:2px solid var(--ink);margin-right:6px;vertical-align:-1px}
+.timer{min-width:3.6em;text-align:center}
+.timer.low{background:#ffb3b3;animation:pulse .5s infinite alternate}
+.hud-mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+#hud-chore{font-weight:700;font-size:clamp(12px,1.8vw,18px);background:rgba(255,255,255,.8);padding:0 10px;border-radius:10px}
+.bar{width:min(340px,100%);height:14px;background:#fff;border:3px solid var(--ink);border-radius:999px;overflow:hidden}
+#hud-bar{height:100%;width:0;background:linear-gradient(90deg,var(--green),#5fd39a);transition:width .2s}
+@keyframes pulse{to{transform:scale(1.08)}}
+
+/* Screens */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center;
+  background:rgba(255,246,233,.94);overflow:auto}
+/* overflow-safe centering: spacers soak up free space, so tall content scrolls down instead of being clipped above the top */
+#screen{justify-content:flex-start}
+#screen::before,#screen::after{content:'';flex:1 0 0;margin:-7px 0}
+.screen.clear{background:transparent;pointer-events:none}
+.screen.clear > *{pointer-events:auto}
+.screen.clear .pop-in > h2{color:#fff;-webkit-text-stroke:6px var(--ink);paint-order:stroke fill} /* result title stays legible over the busy frozen scene */
+h1.logo{font-size:clamp(48px,10vw,112px);margin:0;letter-spacing:4px;color:#fff;
+  -webkit-text-stroke:5px var(--ink);paint-order:stroke fill;text-shadow:0 8px 0 var(--ink);
+  animation:bob 2.4s ease-in-out infinite}
+h1.logo span{display:inline-block}
+h2{margin:0;font-size:clamp(22px,4vw,40px)}
+p{margin:0;font-size:clamp(14px,2vw,20px);max-width:640px}
+.sub{opacity:.75}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-1deg)}}
+
+.btn{font:inherit;font-weight:700;font-size:clamp(16px,2.4vw,24px);padding:10px 28px;border-radius:999px;border:4px solid var(--ink);
+  background:var(--pink);color:#fff;cursor:pointer;box-shadow:0 6px 0 var(--ink);transition:transform .08s, box-shadow .08s;
+  text-shadow:0 2px 0 rgba(59,47,74,.4)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--ink)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--ink)}
+.btn.alt{background:#fff;color:var(--ink);text-shadow:none}
+.btn.small{font-size:clamp(13px,1.8vw,17px);padding:6px 16px;border-width:3px;box-shadow:0 4px 0 var(--ink)}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center}
+
+.card{background:#fff;border:4px solid var(--ink);border-radius:22px;padding:14px 18px;box-shadow:0 6px 0 var(--ink)}
+.players{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.pcard{display:flex;flex-direction:column;gap:6px;align-items:center;width:150px}
+.pcard input{font:inherit;width:100%;text-align:center;border:3px solid var(--ink);border-radius:12px;padding:4px;font-size:16px}
+.swatch{width:42px;height:42px;border-radius:50%;border:4px solid var(--ink)}
+.diff{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.diff button{font:inherit;font-weight:600;font-size:clamp(14px,2vw,20px);padding:10px 18px;border-radius:18px;border:4px solid var(--ink);background:#fff;cursor:pointer;box-shadow:0 4px 0 var(--ink)}
+.diff button.on{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.diff button[data-d=easy].on{background:var(--mint)}
+.diff button[data-d=hard].on{background:var(--butter)}
+.diff button[data-d=super].on{background:#ffb3c7}
+.diff small{display:block;font-weight:400;opacity:.7;font-size:.7em}
+.choremap{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.choremap .c{padding:6px 12px;border-radius:14px;border:3px solid var(--ink);background:#fff;font-weight:600}
+.choremap .c.done{background:var(--mint)}
+.choremap .c.now{background:var(--butter);transform:scale(1.08)}
+.big-emoji{font-size:clamp(48px,9vw,96px);line-height:1;animation:bob 1.6s ease-in-out infinite}
+table.scores{border-collapse:separate;border-spacing:0 6px;font-size:clamp(14px,2vw,20px)}
+table.scores td{background:#fff;padding:6px 14px;border-top:3px solid var(--ink);border-bottom:3px solid var(--ink)}
+table.scores td:first-child{border-left:3px solid var(--ink);border-radius:12px 0 0 12px}
+table.scores td:last-child{border-right:3px solid var(--ink);border-radius:0 12px 12px 0;font-weight:700}
+.pop-in{animation:popin .35s cubic-bezier(.2,1.6,.4,1)}
+@keyframes popin{from{transform:scale(.6);opacity:0}}
+.toast{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-size:clamp(28px,6vw,64px);font-weight:700;color:#fff;
+  -webkit-text-stroke:4px var(--ink);paint-order:stroke fill;pointer-events:none;animation:toast 1.2s ease-out forwards}
+@keyframes toast{0%{transform:translate(-50%,-50%) scale(.4);opacity:0}20%{transform:translate(-50%,-50%) scale(1.15);opacity:1}80%{opacity:1}100%{transform:translate(-50%,-80%) scale(1);opacity:0}}
+.mute{position:absolute;right:8px;bottom:8px;z-index:5;padding:2px 8px!important;font-size:clamp(11px,1.4vw,15px)!important;opacity:.85}
+
+/* short / phone-landscape screens: compact the DOM screens so setup + Start fit with little or no scrolling */
+@media (max-height: 560px) {
+  .screen{gap:8px;padding:12px 16px}
+  h2{font-size:clamp(18px,3.4vw,30px)}
+  .card{padding:8px 12px;border-radius:16px}
+  .pcard{width:130px;flex-direction:row;gap:6px}
+  .swatch{width:26px;height:26px;border-width:3px;flex:none}
+  .pcard input{font-size:14px;padding:2px}
+  .diff button{padding:6px 12px}
+  .big-emoji{font-size:clamp(36px,7vw,64px)}
+  .choremap .c{padding:3px 8px;font-size:13px}
+}
